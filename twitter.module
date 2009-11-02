@@ -1,7 +1,0 @@
-<?php
-
-function user_timeline($n = 10) {
-
-}
-
-?>
