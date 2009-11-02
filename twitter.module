@@ -2,7 +2,13 @@
 
 /* Implementation of hook_block */
 function twitter_block($op = 'list', $delta = 0, $edit = array()) {
+  switch($op)
+    case 'list':
 
+      return;
+    case 'edit':
+
+      return;
   return;
 }
 
