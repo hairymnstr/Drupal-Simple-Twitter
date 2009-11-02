@@ -1,5 +1,11 @@
 <?php
 
+/* Implementation of hook_block */
+function twitter_block($op = 'list', $delta = 0, $edit = array()) {
+
+  return;
+}
+
 function user_timeline($n = 10) {
   $pr = curl_init("http://twitter.com/statuses/user_timeline.xml?screen_name=hairymnstr");
   $res = curl_exec($pr);
