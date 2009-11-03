@@ -2,14 +2,23 @@
 
 /* Implementation of hook_block */
 function twitter_block($op = 'list', $delta = 0, $edit = array()) {
-  switch($op)
+  switch($op) {
     case 'list':
-
+      $blocks[0]['info'] = t('Twitter User Timeline');
+      return $blocks;
+    case 'configure':
+      $form = array();
+      return $form;
+    case 'save':
       return;
-    case 'edit':
-
-      return;
-  return;
+    case 'view': default:
+      switch($delta) {
+        case 0:
+          $block['subject'] = t('debug');
+          $block['content'] = "<pre>" . user_timeline() . "</pre>";
+    }
+    return $block;    
+  }
 }
 
 function user_timeline($n = 10) {
