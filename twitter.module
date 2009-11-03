@@ -28,7 +28,45 @@ function user_timeline($n = 10) {
   $res = ob_get_contents();
   ob_end_clean();
   curl_close($pr);
+  /* now parse the xml a bit */
+  $parser = new twitter_xml_parser();
+  $xml_array = $parser->parse($res);
+  ob_start();
+  print_r($xml_array);
+  $res = ob_get_contents();
+  ob_end_clean();
   return $res;
 }
 
+class twitter_xml_parser {
+  function twitter_xml_parser() {
+    $this->parser = xml_parser_create();
+
+    //xml_set_object($parser, $this);
+
+    xml_set_element_handler($this->parser, array($this, 'tagStart'), array($this, 'tagEnd'));
+    xml_set_character_data_handler($this->parser, array($this, 'tagContent'));
+
+    $this->xml_data = array();
+  }
+
+  function tagStart($parser, $name, $attribs) {
+    if($name == "STATUS") {
+      $this->xml_data[count($this->xml_data)] = array();
+    }
+  }
+
+  function tagEnd($parser, $name) {
+
+  }
+
+  function tagContent($parser, $data) {
+  
+  }
+
+  function parse($xml) {
+    xml_parse($this->parser, $xml);
+    return $this->xml_data;
+  }
+}
 ?>
