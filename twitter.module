@@ -50,6 +50,7 @@ class twitter_xml_parser {
     $this->xml_data = array();
     $this->text_chunk = "";
     $this->mode = "idle";
+    $this->inside = array();
   }
 
   function tagStart($parser, $name, $attribs) {
@@ -65,16 +66,18 @@ class twitter_xml_parser {
       $this->mode = "grab_text";
       $this->text_chunk = "";
     }
+    $this->inside[] = $name;
   }
 
   function tagEnd($parser, $name) {
+    array_pop($this->inside);
     if($name == "TEXT") {
       $this->xml_data[count($this->xml_data) - 1]['text'] = $this->text_chunk;
       $this->mode = "idle";
     } elseif($name == "SOURCE") {
       $this->xml_data[count($this->xml_data) - 1]['source'] = $this->text_chunk;
       $this->mode = "idle";
-    } elseif($name == "CREATED_AT") {
+    } elseif($name == "CREATED_AT" && $this->inside[count($this->inside)-1] == "STATUS") {
       $ptime = strptime($this->text_chunk, "%a %b %d %H:%M:%S %z %Y");
       $this->xml_data[count($this->xml_data) - 1]['date'] = strftime("%d %b %Y %H:%M:%S",mktime($ptime['tm_hour'], $ptime['tm_min'], $ptime['tm_sec'], $ptime['tm_mon'] + 1, $ptime['tm_mday'], $ptime['tm_year'] + 1900));
       $this->xml_data[count($this->xml_data) - 1]['timedata'] = $ptime;
