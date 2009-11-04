@@ -15,8 +15,14 @@ function twitter_block($op = 'list', $delta = 0, $edit = array()) {
       switch($delta) {
         case 0:
           $block['subject'] = t('debug');
-          
-          $block['content'] = "<pre>" . htmlspecialchars(user_timeline()) . "</pre>";
+          $block['content'] = "";
+          $messages = user_timeline();
+          foreach $messages as $msg {
+            $block['content'] .= "<p>" . $msg['text'] . "</p>";
+            $block['content'] .= "<p><span class='twitter-details'>On " . strftime("%e %b %Y", $msg['date']);
+            $block['content'] .= " At " . strftime("%H:%M:%S", $msg['date']) . " From " . $msg['source'] . "</span></p>";
+          }
+          //$block['content'] = "<pre>" . htmlspecialchars(user_timeline()) . "</pre>";
 
     }
     return $block;    
@@ -49,11 +55,7 @@ function user_timeline($n = 10, $keep_at_messages = False) {
       $print_msg[] = array_pop($xml_array);
     }
   }
-  ob_start();
-  print_r($print_msg);
-  $res = ob_get_contents();
-  ob_end_clean();
-  return $res;
+  return $print_msg;
 }
 
 class twitter_xml_parser {
