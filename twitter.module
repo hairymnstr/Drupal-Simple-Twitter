@@ -46,7 +46,7 @@ function user_timeline($n = 10, $keep_at_messages = False) {
         }
       }
     } else {
-      $print_msg = $xml_array[0:$n-1];
+      $print_msg[] = array_pop($xml_array);
     }
   }
   ob_start();
