@@ -17,7 +17,7 @@ function twitter_block($op = 'list', $delta = 0, $edit = array()) {
           $block['subject'] = t('debug');
           $block['content'] = "";
           $messages = user_timeline();
-          foreach $messages as $msg {
+          foreach($messages as $msg) {
             $block['content'] .= "<p>" . $msg['text'] . "</p>";
             $block['content'] .= "<p><span class='twitter-details'>On " . strftime("%e %b %Y", $msg['date']);
             $block['content'] .= " At " . strftime("%H:%M:%S", $msg['date']) . " From " . $msg['source'] . "</span></p>";
