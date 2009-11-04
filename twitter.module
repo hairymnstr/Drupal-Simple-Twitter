@@ -15,13 +15,15 @@ function twitter_block($op = 'list', $delta = 0, $edit = array()) {
       switch($delta) {
         case 0:
           $block['subject'] = t('debug');
+          
           $block['content'] = "<pre>" . htmlspecialchars(user_timeline()) . "</pre>";
+
     }
     return $block;    
   }
 }
 
-function user_timeline($n = 10) {
+function user_timeline($n = 10, $keep_at_messages = False) {
   $pr = curl_init("http://twitter.com/statuses/user_timeline.xml?screen_name=hairymnstr");
   ob_start();
   curl_exec($pr);
@@ -31,8 +33,24 @@ function user_timeline($n = 10) {
   /* now parse the xml a bit */
   $parser = new twitter_xml_parser();
   $xml_array = $parser->parse($res);
+
+  $print_msg = array();
+  $xml_array = array_reverse($xml_array);
+  for($i=0;$i<$n;$i++) {
+    if($keep_at_messages == False) {
+      while(count($xml_array) > 0) {
+        $msg = array_pop($xml_array);
+        if(substr($msg['text'],0,1) != "@") {
+          $print_msg[] = $msg;
+          break;
+        }
+      }
+    } else {
+      $print_msg = $xml_array[0:$n-1];
+    }
+  }
   ob_start();
-  print_r($xml_array);
+  print_r($print_msg);
   $res = ob_get_contents();
   ob_end_clean();
   return $res;
