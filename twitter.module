@@ -1,6 +1,50 @@
 <?php
 
-/* Implementation of hook_block */
+/**
+ *  Implementation of hook_schema
+ */
+function twitter_schema() {
+  $schema['twitter_cache'] = array(
+    'description' => 'The store for cached twitter feeds',
+    'fields' => array(
+      'blockid' => array(
+        'description' => 'The id for this block',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE),
+      'username' => array(
+        'description' => 'The twitter username to be displayed in this block',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'default' => ''),
+      'cache' => array(
+        'description' => 'The cached feed for this user.',
+        'type' => 'blob',
+        'size' => 'big'),
+      'cache_time' => array(
+        'description' => 'The time this data was cached.',
+        'type' => 'datetime'),
+      'show_items' => array(
+        'description' => 'The number of tweets to show in the block.',
+        'type' => 'int',
+        'size' => 'tiny',
+        'unsigned' => TRUE),
+      'show_at_tweets' => array(
+        'description' => 'Whether or not to show @ replies.',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0),
+      ),
+    'primary key' => array('blockid'),
+  );
+  return $schema;
+}
+
+/**
+ *  Implementation of hook_block
+ */
 function twitter_block($op = 'list', $delta = 0, $edit = array()) {
   switch($op) {
     case 'list':
