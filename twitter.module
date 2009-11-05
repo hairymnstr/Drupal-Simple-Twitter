@@ -14,13 +14,16 @@ function twitter_block($op = 'list', $delta = 0, $edit = array()) {
     case 'view': default:
       switch($delta) {
         case 0:
-          $block['subject'] = t('debug');
+          // need to include the css file into the css array
+          $cssPath = drupal_get_path('module', 'twitter') . "/twitter.css";
+          drupal_add_css($cssPath, 'module', 'all', False);
+          $block['subject'] = t('Tweets');
           $block['content'] = "";
           $messages = user_timeline();
           foreach($messages as $msg) {
-            $block['content'] .= "<p>" . $msg['text'] . "</p>";
-            $block['content'] .= "<p><span class='twitter-details'>On " . strftime("%e %b %Y", $msg['date']);
-            $block['content'] .= " At " . strftime("%H:%M:%S", $msg['date']) . " From " . $msg['source'] . "</span></p>";
+            $block['content'] .= "<div class='tweet'>\n  <p>" . $msg['text'] . "</p>\n";
+            $block['content'] .= "  <p><span class='twitter-details'>On " . strftime("%e %b %Y", $msg['date']);
+            $block['content'] .= " at " . strftime("%H:%M", $msg['date']) . " From " . $msg['source'] . "</span></p>\n</div>\n";
           }
           //$block['content'] = "<pre>" . htmlspecialchars(user_timeline()) . "</pre>";
 

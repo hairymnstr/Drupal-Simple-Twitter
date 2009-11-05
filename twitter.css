@@ -1,0 +1,15 @@
+div.tweet {
+  border-bottom: 1px solid #c0c0c0;
+  margin-top: 10px;
+}
+
+div.tweet p {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+span.twitter-details {
+  font-size: 80%;
+  color: #c0c0c0;
+  margin-top: -2px;
+}
