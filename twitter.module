@@ -32,8 +32,51 @@ function twitter_block($op = 'list', $delta = 0, $edit = array()) {
   }
 }
 
+/**
+ *  Implementation of hook_menu()
+ */
+function twitter_menu() {
+  $items = array();
+  $items['admin/settings/twitter'] = array(
+  'title' => 'Twitter Settings',
+  'description' => 'Set up twitter feed blocks',
+  'page callback' => 'drupal_get_form',
+  'page arguments' => array('twitter_admin_settings'),
+  'access arguments' => array('administer twitter'),
+  );
+  return $items;
+}
+
+/**
+ *  Admin settings
+ */
+function twitter_admin_settings() {
+  $form['twitter_settings'] = array(
+  '#type' => 'fieldset',
+  '#title' => t('Twitter Settings'),
+  '#collapsible' => False,
+  '#collapsed' => False,
+  );
+  $form['twitter_settings']['twitter_username'] = array(
+  '#type' => 'textfield',
+  '#title' => t('Your twitter user name'),
+  '#default_value' => variable_get('twitter_username', ''),
+  '#size' => 20,
+  '#maxlength' => 40,
+  '#description' => t('The username of a public twitter account you want to display.'),
+  );
+  return system_settings_form($form);
+}
+
+/**
+ *  implementation of hook_perm
+ */
+function twitter_perm() {
+  return array('administer twitter');
+}
+
 function user_timeline($n = 10, $keep_at_messages = False) {
-  $pr = curl_init("http://twitter.com/statuses/user_timeline.xml?screen_name=hairymnstr");
+  $pr = curl_init("http://twitter.com/statuses/user_timeline.xml?screen_name=" . variable_get('twitter_username', ''));
   ob_start();
   curl_exec($pr);
   $res = ob_get_contents();
