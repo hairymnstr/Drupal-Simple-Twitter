@@ -42,4 +42,18 @@ function twitter_schema() {
   return $schema;
 }
 
+/**
+ *  Implementation of hook_install
+ */
+function twitter_install() {
+  drupal_install_schema('twitter');
+}
+
+/**
+ *  Implementation of hook_uninstall
+ */
+function twitter_uninstall() {
+  drupal_uninstall_schema('twitter');
+}
+
 ?>
