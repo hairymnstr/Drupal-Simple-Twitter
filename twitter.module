@@ -228,6 +228,7 @@ class xmlWhitelist {
   function parse($data) {
     print "xmlWhitelist->parse(" . $data . ")\n";
     print xml_parse($this->parser, $data);
+    print xml_error_string(xml_get_error_code($this->parser));
     return $this->xml_data;
   }
 }
