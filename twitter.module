@@ -188,7 +188,7 @@ class xmlWhitelist {
       // allowed tag, need to check attributes
       $this->xml_data .= "<" . $name;
       foreach($attribs as $key=>$val) {
-        if(array_key_exists($key, $this->allowed_tags[$name]['attribs']) {
+        if(array_key_exists($key, $this->allowed_tags[$name]['attribs'])) {
           // allowed attribute, check content against re
           if(preg_match($this->allowed_tags[$name]['attribs'][$key], $val)) {
             $this->xml_data .= " " . $key . "='" . $val . "'";
