@@ -171,7 +171,7 @@ class xmlWhitelist {
 
     xml_set_element_handler($this->parser, array($this, 'tagStart'), array($this, 'tagEnd'));
     xml_set_character_data_handler($this->parser, array($this, 'tagContent'));
-
+    xml_set_default_handler($this->parser, array($this, 'defaultHandler'));
     $this->xml_data = "";
     $this->text_chunk = "";
     $this->inside = array();
@@ -219,6 +219,10 @@ class xmlWhitelist {
     if($this->keep_stack[count($this->keep_stack) - 1]) {
       $this->xml_data .= $data;
     }
+  }
+
+  function defaultHandler($parser, $data) {
+    print "defaultHandler(" . $data . ")\n";
   }
 
   function parse($data) {
