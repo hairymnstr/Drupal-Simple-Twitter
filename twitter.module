@@ -222,6 +222,7 @@ class xmlWhitelist {
   }
 
   function parse($data) {
+    print "xmlWhitelist->parse(" . $data . ")";
     xml_parse($this->parser, $data);
     return $this->xml_data;
   }
