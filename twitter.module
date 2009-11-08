@@ -181,6 +181,7 @@ class xmlWhitelist {
         'href' => '^http*',
       ),
       'keep_content' => TRUE);
+    $this->keep_stack = array(TRUE);  //start by assuming we can keep data
   }
 
   function tagStart($parser, $name, $attribs) {
