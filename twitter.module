@@ -119,6 +119,7 @@ class twitter_xml_parser {
     $this->text_chunk = "";
     $this->mode = "idle";
     $this->inside = array();
+    $this->xmlwl = xmlWhitelist();
   }
 
   function tagStart($parser, $name, $attribs) {
@@ -140,10 +141,10 @@ class twitter_xml_parser {
   function tagEnd($parser, $name) {
     array_pop($this->inside);
     if($name == "TEXT") {
-      $this->xml_data[count($this->xml_data) - 1]['text'] = $this->text_chunk;
+      $this->xml_data[count($this->xml_data) - 1]['text'] = $this->xmlwl->parse($this->text_chunk);
       $this->mode = "idle";
     } elseif($name == "SOURCE") {
-      $this->xml_data[count($this->xml_data) - 1]['source'] = $this->text_chunk;
+      $this->xml_data[count($this->xml_data) - 1]['source'] = $this->xmlwl->parse($this->text_chunk);
       $this->mode = "idle";
     } elseif($name == "CREATED_AT" && $this->inside[count($this->inside)-1] == "STATUS") {
       $ptime = strptime($this->text_chunk, "%a %b %d %H:%M:%S %z %Y");
@@ -163,4 +164,65 @@ class twitter_xml_parser {
     return $this->xml_data;
   }
 }
+
+class xmlWhitelist {
+  function xmlWhitelist() {
+    $this->parser = xml_parser_create();
+
+    xml_set_element_handler($this->parser, array($this, 'tagStart'), array($this, 'tagEnd'));
+    xml_set_character_data_handler($this->parser, array($this, 'tagContent'));
+
+    $this->xml_data = "";
+    $this->text_chunk = "";
+    $this->inside = array();
+    $this->allowed_tags = array();
+    $this->allowed_tags['a'] = array(
+      'attribs' => array(
+        'href' => '^http*',
+      ),
+      'keep_content' => TRUE);
+  }
+
+  function tagStart($parser, $name, $attribs) {
+    if(array_key_exists($name, $this->allowed_tags)) {
+      // allowed tag, need to check attributes
+      $this->xml_data .= "<" . $name;
+      foreach($attribs as $key=>$val) {
+        if(array_key_exists($key, $this->allowed_tags[$name]['attribs']) {
+          // allowed attribute, check content against re
+          if(preg_match($this->allowed_tags[$name]['attribs'][$key], $val)) {
+            $this->xml_data .= " " . $key . "='" . $val . "'";
+          }
+        }
+      }
+      if($this->allowed_tags[$name]['keep_content']) {
+        $this->keep_stack[] = TRUE;
+      } else {
+        $this->keep_stack[] = FALSE;
+      }
+      $this->xml_data .= ">";
+    }
+    $this->inside[] = $name;
+  }
+
+  function tagEnd($parser, $name) {
+    if(array_key_exists($name, $this->allowed_tags) {
+      $this->xml_data .= "</" + $name + ">";
+    }
+    array_pop($this->inside);
+    array_pop($this->keep_stack);
+  }
+
+  function tagContent($parser, $data) {
+    if($this->keep_stack[count($this->keep_stack) - 1]) {
+      $this->xml_data .= $data;
+    }
+  }
+
+  function parse($data) {
+    xml_parse($this->parser, $data);
+    return $this->xml_data;
+  }
+}
+
 ?>
