@@ -215,6 +215,7 @@ class xmlWhitelist {
   }
 
   function tagContent($parser, $data) {
+    print "tagContent" . $data;
     if($this->keep_stack[count($this->keep_stack) - 1]) {
       $this->xml_data .= $data;
     }
