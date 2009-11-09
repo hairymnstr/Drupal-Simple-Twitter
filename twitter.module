@@ -269,7 +269,7 @@ class xmlWhitelist {
         $this->tagEnd(trim($tc));
       } else {
         // find the first space
-        $bits = explode($tc, " ");
+        $bits = explode(" ", $tc);
         print_r($bits);
         $tn = $bits[0];
         $bits = array_slice($bits,1);
