@@ -161,40 +161,18 @@ class twitter_xml_parser {
 
   function parse($xml) {
     xml_parse($this->parser, $xml);
-    print $this->xmlwl->parse("<a href='script://someothersite.com?from=http://...'>Wibble</a>");
     return $this->xml_data;
   }
 }
 
 class xmlWhitelist {
-  function xmlWhitelist() {
-    //$this->parser = xml_parser_create();
-
-    //xml_set_element_handler($this->parser, array($this, 'tagStart'), array($this, 'tagEnd'));
-    //xml_set_character_data_handler($this->parser, array($this, 'tagContent'));
-    //xml_set_default_handler($this->parser, array($this, 'defaultHandler'));
-    //$this->xml_data = "";
-    //$this->text_chunk = "";
-    //$this->inside = array();
-    //$this->allowed_tags = array();
-    //$this->allowed_tags['a'] = array(
-    //  'attribs' => array(
-    //    'href' => '^http*',
-    //  ),
-    //  'keep_content' => TRUE);
-    //$this->keep_stack = array(TRUE);  //start by assuming we can keep data
-  }
-
   function tagStart($name, $attribs) {
-    print "tagStart(" . $name . ")\n";
-    print_r($attribs);
     if(array_key_exists($name, $this->allowed_tags)) {
       // allowed tag, need to check attributes
       $this->xml_data .= "<" . $name;
       foreach($attribs as $key=>$val) {
         if(array_key_exists($key, $this->allowed_tags[$name]['attribs'])) {
           // allowed attribute, check content against re
-          print "trying regular expressions, stand back!!\n";
           if(preg_match($this->allowed_tags[$name]['attribs'][$key], $val) == 1) {
             $this->xml_data .= " " . $key . "='" . $val . "'";
           }
@@ -207,26 +185,19 @@ class xmlWhitelist {
       }
       $this->xml_data .= ">";
     }
-    //$this->inside[] = $name;
   }
 
   function tagEnd($name) {
     if(array_key_exists($name, $this->allowed_tags)) {
       $this->xml_data .= "</" . $name . ">";
     }
-    //array_pop($this->inside);
     array_pop($this->keep_stack);
   }
 
   function tagContent($data) {
-    print "tagContent(" . $data . ")\n";
     if($this->keep_stack[count($this->keep_stack) - 1]) {
       $this->xml_data .= $data;
     }
-  }
-
-  function defaultHandler($parser, $data) {
-    print "defaultHandler(" . $data . ")\n";
   }
 
   function parse($data) {
@@ -235,6 +206,7 @@ class xmlWhitelist {
     $this->allowed_tags['a'] = array(
       'attribs' => array(
         'href' => '/^http/',
+        'rel' => '/^nofollow',
       ),
       'keep_content' => TRUE);
     $this->keep_stack = array(TRUE);
@@ -256,11 +228,9 @@ class xmlWhitelist {
       }
 
       $tag = substr($data, 0, $te + 1);
-      //print $tag;
       // see if it's an open or close tag or both.
       $tt = 'open';
       $tc = substr($tag,1,-1);
-      print $tc. "\n";
       if(substr($tc,0,1) == "/") {
         $tt = 'close';
         $tc = substr($tag,2,-1);
@@ -269,7 +239,6 @@ class xmlWhitelist {
         $tt = 'both';
         $tc = substr($tag,1,-2);
       }
-      print $tt . " " . $tc . "\n";
       if($tt == 'close') {
         $this->tagEnd(trim($tc));
       } else {
@@ -290,9 +259,6 @@ class xmlWhitelist {
       }
       $data = substr($data, $te + 1);
     }
-    //print "xmlWhitelist->parse(" . $data . ")\n";
-    //print xml_parse($this->parser, "<xml>" . $data . "</xml>", TRUE);
-    //print xml_error_string(xml_get_error_code($this->parser));
     return $this->xml_data;
   }
 }
