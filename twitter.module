@@ -266,7 +266,7 @@ class xmlWhitelist {
         $tt = 'both';
         $tc = substr($tag,1,-2);
       }
-      print $tt . " " . $tc . "\n"
+      print $tt . " " . $tc . "\n";
       if($tt == 'close') {
         $this->tagEnd(trim($tc));
       } else {
