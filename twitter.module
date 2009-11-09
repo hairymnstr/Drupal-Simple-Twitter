@@ -167,21 +167,21 @@ class twitter_xml_parser {
 
 class xmlWhitelist {
   function xmlWhitelist() {
-    $this->parser = xml_parser_create();
+    //$this->parser = xml_parser_create();
 
-    xml_set_element_handler($this->parser, array($this, 'tagStart'), array($this, 'tagEnd'));
-    xml_set_character_data_handler($this->parser, array($this, 'tagContent'));
-    xml_set_default_handler($this->parser, array($this, 'defaultHandler'));
-    $this->xml_data = "";
-    $this->text_chunk = "";
-    $this->inside = array();
-    $this->allowed_tags = array();
-    $this->allowed_tags['a'] = array(
-      'attribs' => array(
-        'href' => '^http*',
-      ),
-      'keep_content' => TRUE);
-    $this->keep_stack = array(TRUE);  //start by assuming we can keep data
+    //xml_set_element_handler($this->parser, array($this, 'tagStart'), array($this, 'tagEnd'));
+    //xml_set_character_data_handler($this->parser, array($this, 'tagContent'));
+    //xml_set_default_handler($this->parser, array($this, 'defaultHandler'));
+    //$this->xml_data = "";
+    //$this->text_chunk = "";
+    //$this->inside = array();
+    //$this->allowed_tags = array();
+    //$this->allowed_tags['a'] = array(
+    //  'attribs' => array(
+    //    'href' => '^http*',
+    //  ),
+    //  'keep_content' => TRUE);
+    //$this->keep_stack = array(TRUE);  //start by assuming we can keep data
   }
 
   function tagStart($parser, $name, $attribs) {
@@ -226,9 +226,41 @@ class xmlWhitelist {
   }
 
   function parse($data) {
-    print "xmlWhitelist->parse(" . $data . ")\n";
-    print xml_parse($this->parser, "<xml>" . $data . "</xml>", TRUE);
-    print xml_error_string(xml_get_error_code($this->parser));
+    $this->xml_data = "";
+    $this->allowed_tags = array();
+    $this->allowed_tags['a'] = array(
+      'attribs' => array(
+        'href' => '^http.*',
+      ),
+      'keep_content' => TRUE);
+    $this->keep_stack = array(TRUE);
+    
+    while(strlen($data) > 0) {
+      $t = strpos($data,"<");
+      if($t===FALSE) {
+        $this->tagContent($data);
+        break;
+      }
+      $this->tagContent(substr($data,0,$t));
+      $data = substr($data,$t);
+
+      // find the end of the tag
+      $te = strpos($data,">");
+      if($te === FALSE) {
+        print "Invalid XML - Unclosed tag after " . $data;
+        return FALSE;
+      }
+
+      $tag = substr($data, $t, $te - $t);
+      print $tag;
+      // see if it's a complete open/close tag
+      //if(substr($tag,-1) == "/") {
+        // open and close call both
+      $data = substr($data, $te);
+    }
+    //print "xmlWhitelist->parse(" . $data . ")\n";
+    //print xml_parse($this->parser, "<xml>" . $data . "</xml>", TRUE);
+    //print xml_error_string(xml_get_error_code($this->parser));
     return $this->xml_data;
   }
 }
