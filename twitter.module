@@ -186,6 +186,7 @@ class xmlWhitelist {
 
   function tagStart($name, $attribs) {
     print "tagStart(" . $name . ")\n";
+    print_r($attribs);
     if(array_key_exists($name, $this->allowed_tags)) {
       // allowed tag, need to check attributes
       $this->xml_data .= "<" . $name;
