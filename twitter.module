@@ -161,6 +161,7 @@ class twitter_xml_parser {
 
   function parse($xml) {
     xml_parse($this->parser, $xml);
+    print $this->xmlwl->parse("<a href='script://someothersite.com?from=http://...'>Wibble</a>");
     return $this->xml_data;
   }
 }
@@ -233,7 +234,7 @@ class xmlWhitelist {
     $this->allowed_tags = array();
     $this->allowed_tags['a'] = array(
       'attribs' => array(
-        'href' => '/^ftp/',
+        'href' => '/^http/',
       ),
       'keep_content' => TRUE);
     $this->keep_stack = array(TRUE);
