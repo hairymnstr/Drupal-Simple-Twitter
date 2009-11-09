@@ -233,7 +233,7 @@ class xmlWhitelist {
     $this->allowed_tags = array();
     $this->allowed_tags['a'] = array(
       'attribs' => array(
-        'href' => '/^http/',
+        'href' => '/^ftp/',
       ),
       'keep_content' => TRUE);
     $this->keep_stack = array(TRUE);
