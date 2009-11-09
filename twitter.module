@@ -206,7 +206,7 @@ class xmlWhitelist {
     $this->allowed_tags['a'] = array(
       'attribs' => array(
         'href' => '/^http/',
-        'rel' => '/^nofollow',
+        'rel' => '/^nofollow/',
       ),
       'keep_content' => TRUE);
     $this->keep_stack = array(TRUE);
@@ -244,7 +244,6 @@ class xmlWhitelist {
       } else {
         // find the first space
         $bits = explode(" ", $tc);
-        print_r($bits);
         $tn = $bits[0];
         $bits = array_slice($bits,1);
         $attribs = array();
