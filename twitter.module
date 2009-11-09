@@ -257,6 +257,7 @@ class xmlWhitelist {
       //if(substr($tag,-1) == "/") {
         // open and close call both
       $data = substr($data, $te + 1);
+      print "looping, remaining data " . $data;
     }
     //print "xmlWhitelist->parse(" . $data . ")\n";
     //print xml_parse($this->parser, "<xml>" . $data . "</xml>", TRUE);
