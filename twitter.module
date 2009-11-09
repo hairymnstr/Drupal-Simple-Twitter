@@ -192,6 +192,7 @@ class xmlWhitelist {
       foreach($attribs as $key=>$val) {
         if(array_key_exists($key, $this->allowed_tags[$name]['attribs'])) {
           // allowed attribute, check content against re
+          print "trying regular expressions, stand back!!\n";
           if(preg_match($this->allowed_tags[$name]['attribs'][$key], $val) == 1) {
             $this->xml_data .= " " . $key . "='" . $val . "'";
           }
