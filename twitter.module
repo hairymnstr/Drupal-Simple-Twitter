@@ -252,12 +252,36 @@ class xmlWhitelist {
       }
 
       $tag = substr($data, 0, $te + 1);
-      print $tag;
-      // see if it's a complete open/close tag
-      //if(substr($tag,-1) == "/") {
+      //print $tag;
+      // see if it's an open or close tag or both.
+      $tt = 'open';
+      $tc = substr($tc,1,-1);
+      if(substr($tag,0,1) == "/") {
+        $tt = 'close';
+        $tc = substr($tag,2,-1);
+      } elseif(substr($tc,-1) == "/") {
         // open and close call both
+        $tt = 'both';
+        $tc = substr($tag,1,-2);
+      }
+      if($tt = 'close') {
+        $this->tagClose(trim($tc));
+      } else {
+        // find the first space
+        $bits = explode($tc, " ");
+        $tn = $bits[0];
+        $bits = array_slice($bits,1);
+        $attribs = array();
+        foreach($bits as $attr) {
+          list($key, $val) = explode(trim($attr), "=",2);
+          $attribs[$key] = substr($val, 1, -1);
+        }
+        $this->tagOpen($tn, $attribs);
+        if($tt == "both") {
+          $this->tagClose($tn);
+        }
+      }
       $data = substr($data, $te + 1);
-      print "looping, remaining data " . $data;
     }
     //print "xmlWhitelist->parse(" . $data . ")\n";
     //print xml_parse($this->parser, "<xml>" . $data . "</xml>", TRUE);
