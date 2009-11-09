@@ -192,7 +192,7 @@ class xmlWhitelist {
       foreach($attribs as $key=>$val) {
         if(array_key_exists($key, $this->allowed_tags[$name]['attribs'])) {
           // allowed attribute, check content against re
-          if(preg_match($this->allowed_tags[$name]['attribs'][$key], $val)) {
+          if(preg_match($this->allowed_tags[$name]['attribs'][$key], $val) == 1) {
             $this->xml_data .= " " . $key . "='" . $val . "'";
           }
         }
@@ -231,7 +231,7 @@ class xmlWhitelist {
     $this->allowed_tags = array();
     $this->allowed_tags['a'] = array(
       'attribs' => array(
-        'href' => '^http.*',
+        'href' => '/^http/',
       ),
       'keep_content' => TRUE);
     $this->keep_stack = array(TRUE);
