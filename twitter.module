@@ -251,12 +251,12 @@ class xmlWhitelist {
         return FALSE;
       }
 
-      $tag = substr($data, $t, $te - $t);
+      $tag = substr($data, $t, $te - $t + 1);
       print $tag;
       // see if it's a complete open/close tag
       //if(substr($tag,-1) == "/") {
         // open and close call both
-      $data = substr($data, $te);
+      $data = substr($data, $te + 1);
     }
     //print "xmlWhitelist->parse(" . $data . ")\n";
     //print xml_parse($this->parser, "<xml>" . $data . "</xml>", TRUE);
