@@ -203,14 +203,14 @@ class xmlWhitelist {
       }
       $this->xml_data .= ">";
     }
-    $this->inside[] = $name;
+    //$this->inside[] = $name;
   }
 
   function tagEnd($name) {
     if(array_key_exists($name, $this->allowed_tags)) {
       $this->xml_data .= "</" + $name + ">";
     }
-    array_pop($this->inside);
+    //array_pop($this->inside);
     array_pop($this->keep_stack);
   }
 
