@@ -279,7 +279,7 @@ class xmlWhitelist {
         $bits = array_slice($bits,1);
         $attribs = array();
         foreach($bits as $attr) {
-          list($key, $val) = explode(trim($attr), "=",2);
+          list($key, $val) = explode("=", trim($attr), 2);
           $attribs[$key] = substr($val, 1, -1);
         }
         $this->tagStart($tn, $attribs);
