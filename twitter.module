@@ -265,7 +265,7 @@ class xmlWhitelist {
         $tt = 'both';
         $tc = substr($tag,1,-2);
       }
-      if($tt = 'close') {
+      if($tt == 'close') {
         $this->tagEnd(trim($tc));
       } else {
         // find the first space
@@ -277,7 +277,7 @@ class xmlWhitelist {
           list($key, $val) = explode(trim($attr), "=",2);
           $attribs[$key] = substr($val, 1, -1);
         }
-        $this->tagOpen($tn, $attribs);
+        $this->tagStart($tn, $attribs);
         if($tt == "both") {
           $this->tagEnd($tn);
         }
