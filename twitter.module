@@ -184,7 +184,7 @@ class xmlWhitelist {
     //$this->keep_stack = array(TRUE);  //start by assuming we can keep data
   }
 
-  function tagStart($parser, $name, $attribs) {
+  function tagStart($name, $attribs) {
     if(array_key_exists($name, $this->allowed_tags)) {
       // allowed tag, need to check attributes
       $this->xml_data .= "<" . $name;
@@ -206,7 +206,7 @@ class xmlWhitelist {
     $this->inside[] = $name;
   }
 
-  function tagEnd($parser, $name) {
+  function tagEnd($name) {
     if(array_key_exists($name, $this->allowed_tags)) {
       $this->xml_data .= "</" + $name + ">";
     }
@@ -214,7 +214,7 @@ class xmlWhitelist {
     array_pop($this->keep_stack);
   }
 
-  function tagContent($parser, $data) {
+  function tagContent($data) {
     print "tagContent(" . $data . ")\n";
     if($this->keep_stack[count($this->keep_stack) - 1]) {
       $this->xml_data .= $data;
