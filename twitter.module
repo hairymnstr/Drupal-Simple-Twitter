@@ -270,6 +270,7 @@ class xmlWhitelist {
       } else {
         // find the first space
         $bits = explode($tc, " ");
+        print_r($bits);
         $tn = $bits[0];
         $bits = array_slice($bits,1);
         $attribs = array();
