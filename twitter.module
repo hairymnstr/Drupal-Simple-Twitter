@@ -256,7 +256,7 @@ class xmlWhitelist {
       //print $tag;
       // see if it's an open or close tag or both.
       $tt = 'open';
-      $tc = substr($tc,1,-1);
+      $tc = substr($tag,1,-1);
       print $tc;
       if(substr($tag,0,1) == "/") {
         $tt = 'close';
