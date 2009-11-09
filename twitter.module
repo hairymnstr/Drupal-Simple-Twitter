@@ -265,7 +265,7 @@ class xmlWhitelist {
         $tc = substr($tag,1,-2);
       }
       if($tt = 'close') {
-        $this->tagClose(trim($tc));
+        $this->tagEnd(trim($tc));
       } else {
         // find the first space
         $bits = explode($tc, " ");
@@ -278,7 +278,7 @@ class xmlWhitelist {
         }
         $this->tagOpen($tn, $attribs);
         if($tt == "both") {
-          $this->tagClose($tn);
+          $this->tagEnd($tn);
         }
       }
       $data = substr($data, $te + 1);
