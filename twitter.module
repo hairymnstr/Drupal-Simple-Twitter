@@ -42,23 +42,22 @@ function twitter_block($op = 'list', $delta = 0, $edit = array()) {
           return;
       }
     case 'view': default:
-      switch($delta) {
-        case 0:
-          // need to include the css file into the css array
-          $cssPath = drupal_get_path('module', 'twitter') . "/twitter.css";
-          drupal_add_css($cssPath, 'module', 'all', False);
-          $block['subject'] = t('Tweets');
-          $block['content'] = "";
-          $messages = user_timeline();
-          foreach($messages as $msg) {
-            $block['content'] .= "<div class='tweet'>\n  <p>" . $msg['text'] . "</p>\n";
-            $block['content'] .= "  <p><span class='twitter-details'>On " . strftime("%e %b %Y", $msg['date']);
-            $block['content'] .= " at " . strftime("%H:%M", $msg['date']) . " From " . $msg['source'] . "</span></p>\n</div>\n";
-          }
-          //$block['content'] = "<pre>" . htmlspecialchars(user_timeline()) . "</pre>";
-
-    }
-    return $block;    
+      // always include the css file
+      $cssPath = drupal_get_path('module', 'twitter') . "/twitter.css";
+      drupal_add_css($cssPath, 'module', 'all', FALSE);
+      // see if there is a block with this delta in the database
+      $result = db_query("SELECT * FROM twitter_cache WHERE blockid=%d", $delta);
+      if( $row = db_fetch_array($result)) {
+        $block['subject'] = t('Tweets');
+        $block['content'] = "";
+        $messages = user_timeline($row['username'], $row['show_items'], $row['show_at_tweets']);
+        foreach($messages as $msg) {
+          $block['content'] .= "<div class='tweet'>\n  <p>" . $msg['text'] . "</p>\n";
+          $block['content'] .= "  <p><span class='twitter-details'>On " . strftime("%e %b %Y", $msg['date']);
+          $block['content'] .= " at " . strftime("%H:%M", $msg['date']) . " From " . $msg['source'] . "</span></p>\n</div>\n";
+        }
+      }
+      return $block;    
   }
 }
 
@@ -105,8 +104,8 @@ function twitter_perm() {
   return array('administer twitter');
 }
 
-function user_timeline($n = 10, $keep_at_messages = False) {
-  $pr = curl_init("http://twitter.com/statuses/user_timeline.xml?screen_name=" . variable_get('twitter_username', ''));
+function user_timeline($username, $n = 10, $keep_at_messages = False) {
+  $pr = curl_init("http://twitter.com/statuses/user_timeline.xml?screen_name=" . $username);
   ob_start();
   curl_exec($pr);
   $res = ob_get_contents();
