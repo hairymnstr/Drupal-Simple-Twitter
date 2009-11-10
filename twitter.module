@@ -30,7 +30,17 @@ function twitter_block($op = 'list', $delta = 0, $edit = array()) {
           return $form;
       }
     case 'save':
-      return;
+      switch($delta) {
+        case 'new':
+          $data = array(
+            'username' => $edit['username'],
+            'show_items' => 5,
+            'show_at_tweets' => FALSE);
+          drupal_write_record('twitter_cache',$data);
+          return;
+        default:
+          return;
+      }
     case 'view': default:
       switch($delta) {
         case 0:
