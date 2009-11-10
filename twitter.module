@@ -24,10 +24,11 @@ function twitter_block($op = 'list', $delta = 0, $edit = array()) {
             '#maxlength' => 255,
             '#description' => t('The username of a public twitter account you want to display.'),
           );
+          return $form;
         default:
           $form = array();
+          return $form;
       }
-      return $form;
     case 'save':
       return;
     case 'view': default:
