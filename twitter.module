@@ -48,7 +48,7 @@ function twitter_block($op = 'list', $delta = 0, $edit = array()) {
       // see if there is a block with this delta in the database
       $result = db_query("SELECT * FROM twitter_cache WHERE blockid=%d", $delta);
       if( $row = db_fetch_array($result)) {
-        $block['subject'] = t('Tweets');
+        $block['subject'] = "@" . $row['username'] . "'s Tweets";
         $block['content'] = "";
         $messages = user_timeline($row['username'], $row['show_items'], $row['show_at_tweets']);
         foreach($messages as $msg) {
