@@ -10,9 +10,26 @@ function twitter_block($op = 'list', $delta = 0, $edit = array()) {
       while($row = db_fetch_array($result)) {
         $blocks[$row['blockid']]['info'] = "@" . $row['username'] . "'s Twitter feed";
       }
+      $blocks['new']['info'] = "New Twitter Feed";
       return $blocks;
     case 'configure':
-      $form = array();
+      switch($delta) {
+        case 'new':
+          $form = array();
+          $form['twitter_settings'] = array(
+            '#type' => 'fieldset',
+            '#title' => t('New Twitter Array'),
+            '#collapsible' => FALSE,
+            '#collapsed' => FALSE,
+          );
+          $form['twitter_settings']['username'] = array(
+            '#type' => 'textfield',
+            '#title' => t('The twitter username to follow'),
+            '#default_value' => '',
+            '#size' => 20,
+            '#maxlength' => 255,
+            '#description' => t('The username of a public twitter account you want to display.'),
+          );
       return $form;
     case 'save':
       return;
