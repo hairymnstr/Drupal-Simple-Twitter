@@ -7,8 +7,9 @@ function twitter_block($op = 'list', $delta = 0, $edit = array()) {
   switch($op) {
     case 'list':
       $result = db_query("SELECT blockid, username FROM twitter_cache");
-      print_r($result);
-      $blocks[0]['info'] = t('Twitter User Timeline');
+      while($row = db_fetch_array($result)) {
+        $blocks[$row['blockid']]['info'] = "@" . $row['username'] . "'s Twitter feed";
+      }
       return $blocks;
     case 'configure':
       $form = array();
