@@ -3,6 +3,6 @@ description = "Provides a single user's twitter timeline as a block."
 version = VERSION
 core = 6.x
 
-version = "0.1-dev"
+version = "6.x-0.x-dev"
 project = "nd-twitter"
 datestamp = "1257273157"
