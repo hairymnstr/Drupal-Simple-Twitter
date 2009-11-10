@@ -16,13 +16,7 @@ function twitter_block($op = 'list', $delta = 0, $edit = array()) {
       switch($delta) {
         case 'new':
           $form = array();
-          $form['twitter_settings'] = array(
-            '#type' => 'fieldset',
-            '#title' => t('New Twitter Array'),
-            '#collapsible' => FALSE,
-            '#collapsed' => FALSE,
-          );
-          $form['twitter_settings']['username'] = array(
+          $form['username'] = array(
             '#type' => 'textfield',
             '#title' => t('The twitter username to follow'),
             '#default_value' => '',
