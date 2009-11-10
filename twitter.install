@@ -60,7 +60,8 @@ function twitter_uninstall() {
  *  Update to database using version
  */
 function twitter_update_6000() {
-  drupal_install_schema('twitter');
+  $ret = drupal_install_schema('twitter');
+  return $ret;
 }
 
 ?>
