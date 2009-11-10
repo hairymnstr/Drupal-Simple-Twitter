@@ -6,6 +6,8 @@
 function twitter_block($op = 'list', $delta = 0, $edit = array()) {
   switch($op) {
     case 'list':
+      $result = db_query("SELECT blockid, username FROM twitter_cache");
+      print_r($result);
       $blocks[0]['info'] = t('Twitter User Timeline');
       return $blocks;
     case 'configure':
