@@ -35,6 +35,11 @@ function twitter_block($op = 'list', $delta = 0, $edit = array()) {
             '#maxlength' => 255,
             '#description' => t('The username of a public twitter account you want to display.'),
           );
+          $form['twitter_delete'] = array(
+            '#type' => 'checkbox',
+            '#title' => t('Delete this block'),
+            '#default_value' => FALSE,
+          );
         }
       }
       return $form;
