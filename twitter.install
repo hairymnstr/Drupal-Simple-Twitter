@@ -21,7 +21,8 @@ function twitter_schema() {
       'cache' => array(
         'description' => 'The cached feed for this user.',
         'type' => 'blob',
-        'size' => 'big'),
+        'size' => 'big',
+        'serialize' => TRUE),
       'cache_time' => array(
         'description' => 'The time this data was cached.',
         'type' => 'datetime'),
