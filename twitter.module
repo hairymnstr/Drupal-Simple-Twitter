@@ -88,7 +88,7 @@ function twitter_block($op = 'list', $delta = 0, $edit = array()) {
             'blockid' => $delta,
             'cache' => $messages,
             'cache_time' => strftime("%Y-%m-%d %H:%M:%S"),
-          }
+          );
           drupal_write_record('twitter_cache', $data, 'blockid');
         } else {
           // cache is new enough
