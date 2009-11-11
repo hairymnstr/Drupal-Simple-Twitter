@@ -80,7 +80,7 @@ function twitter_block($op = 'list', $delta = 0, $edit = array()) {
         $block['subject'] = "@" . $row['username'] . "'s Tweets";
         $block['content'] = "";
         // now need to see what the timestamp on the cache is
-        if(strptime($row['cache_time'], "%Y-%m-%d %H:%M:%S") < (time() - (15 * 60))) {
+        if(strtotime($row['cache_time']) < (time() - (15 * 60))) {
           // need to refresh cache
           $block['content'] .= "<p>Refreshing Cache</p>\n";
           $messages = user_timeline($row['username'], $row['show_items'], $row['show_at_tweets']);
