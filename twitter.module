@@ -86,7 +86,7 @@ function twitter_block($op = 'list', $delta = 0, $edit = array()) {
           $messages = user_timeline($row['username'], $row['show_items'], $row['show_at_tweets']);
           $data = array(
             'blockid' => $delta,
-            'cache' => $messages,
+            'cache' => serialize($messages),
             'cache_time' => strftime("%Y-%m-%d %H:%M:%S"),
           );
           drupal_write_record('twitter_cache', $data, 'blockid');
