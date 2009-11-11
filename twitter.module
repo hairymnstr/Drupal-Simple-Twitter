@@ -48,7 +48,8 @@ function twitter_block($op = 'list', $delta = 0, $edit = array()) {
         $data = array(
           'username' => $edit['twitter_username'],
           'show_items' => 5,
-          'show_at_tweets' => FALSE);
+          'show_at_tweets' => FALSE,
+          'cache_time' => strftime("%Y-%m-%d %H:%M:%S", 0));
         drupal_write_record('twitter_cache',$data);
       } else {
         $result = db_query("SELECT * FROM twitter_cache WHERE blockid=%d", $delta);
@@ -60,7 +61,9 @@ function twitter_block($op = 'list', $delta = 0, $edit = array()) {
               'username' => $edit['twitter_username'],
               'show_items' => 5,
               'show_at_tweets' => FALSE,
-              'blockid' => $delta);
+              'blockid' => $delta,
+              'cache_time' => strftime("%Y-%m-%d %H:%M:%S", 0), //reset the cache time to the epoch to make sure this gets rebuilt
+            );
             drupal_write_record('twitter_cache', $data, 'blockid');
           }
         }
