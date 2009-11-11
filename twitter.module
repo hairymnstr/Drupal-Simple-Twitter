@@ -92,7 +92,7 @@ function twitter_block($op = 'list', $delta = 0, $edit = array()) {
           drupal_write_record('twitter_cache', $data, 'blockid');
         } else {
           // cache is new enough
-          $block['content'] .= sprintf("<p>Loading from cache %d %d</p>\n", strptime($row['cache_time'], "%Y-%m-%d %H:%M%S"), time() - (60*15));
+          $block['content'] .= sprintf("<p>Loading from cache %d %d</p>\n", strtotime($row['cache_time']), time() - (60*15));
           $messages = unserialize($row['cache']);
         }
         foreach($messages as $msg) {
