@@ -53,13 +53,16 @@ function twitter_block($op = 'list', $delta = 0, $edit = array()) {
       } else {
         $result = db_query("SELECT * FROM twitter_cache WHERE blockid=%d", $delta);
         if($row = db_fetch_array($result)) {
-          print $edit['twitter_delete'];
-          $data = array(
-            'username' => $edit['twitter_username'],
-            'show_items' => 5,
-            'show_at_tweets' => FALSE,
-            'blockid' => $delta);
-          drupal_write_record('twitter_cache', $data, 'blockid');
+          if($edit['twitter_delete'] == 1) {
+            db_query("DELETE FROM twitter_cache WHERE blockid=%d", $delta);
+          } else {
+            $data = array(
+              'username' => $edit['twitter_username'],
+              'show_items' => 5,
+              'show_at_tweets' => FALSE,
+              'blockid' => $delta);
+            drupal_write_record('twitter_cache', $data, 'blockid');
+          }
         }
       }
       return;      
