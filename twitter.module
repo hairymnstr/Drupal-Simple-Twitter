@@ -11,7 +11,7 @@ function twitter_block($op = 'list', $delta = 0, $edit = array()) {
         $blocks[$row['blockid']]['info'] = "@" . $row['username'] . "'s Twitter feed";
       }
       $blocks['new']['info'] = "New Twitter Feed";
-      $blocks['new']['region'] = "none";
+      $blocks['new']['region'] = "-1";
       return $blocks;
     case 'configure':
       $form = array();
