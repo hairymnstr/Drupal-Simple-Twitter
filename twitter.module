@@ -53,6 +53,7 @@ function twitter_block($op = 'list', $delta = 0, $edit = array()) {
       } else {
         $result = db_query("SELECT * FROM twitter_cache WHERE blockid=%d", $delta);
         if($row = db_fetch_array($result)) {
+          print $edit['twitter_delete'];
           $data = array(
             'username' => $edit['twitter_username'],
             'show_items' => 5,
