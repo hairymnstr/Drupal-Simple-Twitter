@@ -76,6 +76,8 @@ function twitter_block($op = 'list', $delta = 0, $edit = array()) {
       if( $row = db_fetch_array($result)) {
         $block['subject'] = "@" . $row['username'] . "'s Tweets";
         $block['content'] = "";
+        // now need to see what the timestamp on the cache is
+        $block['content'] .= "<p>" . $row['cache_time'] . "</p>\n\n";
         $messages = user_timeline($row['username'], $row['show_items'], $row['show_at_tweets']);
         foreach($messages as $msg) {
           $block['content'] .= "<div class='tweet'>\n  <p>" . $msg['text'] . "</p>\n";
