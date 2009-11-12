@@ -208,7 +208,7 @@ function twitter_settings_submit($form, &$form_state) {
           'blockid' => $id,
           'username' => $form_state['values'][sprintf("username_%d", $id)],
           'show_at_tweets' => $form_state['values'][sprintf("at_posts_%d", $id)],
-          'show_items' => $form_state['value'][sprintf("show_posts_%d", $id)],
+          'show_items' => int($form_state['value'][sprintf("show_posts_%d", $id)]),
           'cache_time' => strftime("%Y-%m-%d %H:%M:%S", 0)); // reset cache time so the block is reloaded with new settings
         drupal_write_record('twitter_cache', $data, 'blockid');
       }
