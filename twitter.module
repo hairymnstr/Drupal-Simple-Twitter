@@ -181,8 +181,25 @@ function twitter_admin_settings() {
 
 function twitter_settings_submit($form, &$form_state) {
   $op = isset($form_state['values']['op']) ? $form_state['values']['op'] : '';
-  print_r($form);
-  print_r($form_state);
+  if($op == t('Save configuration')) {
+    // need to put all the username preferences and whatnot in the database
+    $update_list = array();
+    $result = db_query("SELECT blockid, username, show_at_tweets, show_items FROM twitter_cache");
+    while($row = db_fetch_array($result)) {
+      if($form_state['values'][sprintf("delete_%d", $row['blockid'])]) {
+        $update_list[$row['blockid']] = "DEL";
+      } elseif(($form_state['values'][sprintf("username_%d", $row['blockid'])] == $row['username'])) {
+        $update_list[$row['blockid']] = "UPD";
+        drupal_set_message(sprintf("Updated %s because username has changed", $row['username']));
+      } elseif(($form_state['values'][sprintf("at_posts_%d", $row['blockid'])] == $row['show_at_tweets'])) {
+        $update_list[$row['blockid']] = "UPD";
+        drupal_set_message(sprintf("Updated %s because show_at_tweets was changed"));
+      } elseif(($form_state['values'][sprintf("show_posts_%d", $row['blockid'])] == $row['show_items'])) {
+        $update_list[$row['blockid']] = "UPD";
+        drupal_set_message(sprintf("Updated %s because show_items was changed"));
+      }
+    }
+  }
   if($op == t('Reset to defaults')) {
     drupal_set_message(t('The configuration options have been reset to their default values.'));
   } else {
