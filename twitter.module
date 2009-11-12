@@ -60,7 +60,7 @@ function twitter_fuzzy_time($timestamp) {
   } elseif((time() - $timestamp) > (60 * 60)) {
     $out = sprintf("%d hours ago", round((time() - $timestamp) / (60 * 60)));
   } elseif((time() - $timestamp) > 60) {
-    $out = sprintf("%d minutes ago", round((time() - $timestamp) / 60);
+    $out = sprintf("%d minutes ago", round((time() - $timestamp) / 60));
   } else {
     $out = "Less than a minute ago";
   }
