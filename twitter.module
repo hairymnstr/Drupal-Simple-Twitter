@@ -276,7 +276,7 @@ function twitter_link_users($text) {
         if(strlen($text) == 0) {
           if(!($un == "")) {$out .= "<a href='http://twitter.com/" . $un . "' rel='nofollow'>" . $un . "</a>";}
           break;
-        } elseif(stripos("abcdefghijklmnopqrstuvwxyz0123456789", substr($text, 0, 1)) === FALSE) {
+        } elseif(stripos("abcdefghijklmnopqrstuvwxyz0123456789_", substr($text, 0, 1)) === FALSE) {
           if(!($un =="")) {$out .= "<a href='http://twitter.com/" . $un . "' rel='nofollow'>" . $un . "</a>";}
           break;
         } else {
