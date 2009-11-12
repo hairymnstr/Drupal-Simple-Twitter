@@ -199,6 +199,19 @@ function twitter_settings_submit($form, &$form_state) {
         drupal_set_message(sprintf("Updated %s because show_items was changed", $row['username']));
       }
     }
+    // now we know what needs to be done, run the database queries
+    foreach($update_list as $id => $act) {
+      if($act == "DEL") {
+        db_query("DELETE FROM twitter_cache WHERE blockid=%d", $id);
+      } else {
+        $data = array(
+          'blockid' => $id,
+          'username' => $form_state['values'][sprintf("username_%d", $id)],
+          'show_at_tweets' => $form_state['values'][sprintf("at_posts_%d", $id)],
+          'show_items' => $form_state['value'][sprintf("show_posts_%d", $id)]);
+        drupal_write_recort('twitter_cache', $data, 'blockid');
+      }
+    }
   }
   if($op == t('Reset to defaults')) {
     drupal_set_message(t('The configuration options have been reset to their default values.'));
