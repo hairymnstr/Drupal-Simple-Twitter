@@ -136,6 +136,38 @@ function twitter_admin_settings() {
   '#maxlength' => 40,
   '#description' => t('The username of a public twitter account you want to display.'),
   );
+  $result = db_query("SELECT username, blockid, show_at_tweets, show_tweets FROM twitter_cache");
+  while($row = db_fetch_array($result)) {
+    $form[sprintf("twitter_user_%d", $row['blockid'])] = array(
+      '#type' => 'fieldset',
+      '#title' => "@" . $row['username'] . "'s Twitter Settings",
+      '#collapsible' => FALSE,
+      '#collapsed' => FALSE);
+    $form[sprintf("twitter_user_%d", $row['blockid'])][sprintf("username_%d", $row['blockid'])] = array(
+      '#type' => 'textfield',
+      '#title' => t('Twitter user name'),
+      '#default_value' => $row['username'],
+      '#size' => 40,
+      '#maxlength' => 255,
+      '#description' => t('The username of a public Twitter feed to display.'));
+    $form[sprintf("twitter_user_%d", $row['blockid'])][sprintf("at_posts_%d", $row['blockid'])] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Display @ Tweets'),
+      '#default_value' => $row['show_at_tweets'],
+      '#description' => t('Show directed replies that start with an @ symbol.'));
+    $form[sprintf("twitter_user_%d", $row['blockid'])][sprintf("show_posts_%d", $row['blockid'])] = array(
+      '#type' => 'textfield',
+      '#title' => t('Number of Tweets to show'),
+      '#default_value' => $row['show_tweets'],
+      '#size' => 4,
+      '#maxlength' => 2,
+      '#description' => t('The maximum number of tweets to display at once.  Only the last 20 are retrieved so if you\'ve set this more than 20 or hidden @ replies it will be less than 20'));
+    $form[sprintf("twitter_user_%d", $row['blockid'])][sprintf("delete_%d", $row['blockid'])] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Delete this Twitter block'),
+      '#default_value' => FALSE,
+      '#description' => t('Remove this block from the site.'));
+  }
   $form['buttons']['submit'] = array('#type' => 'submit', '#value' => t('Save configuration'));
   $form['buttons']['reset'] = array('#type' => 'submit', '#value' => t('Reset to defaults'));
 
@@ -148,8 +180,14 @@ function twitter_admin_settings() {
 }
 
 function twitter_settings_submit($form, &$form_state) {
+  $op = isset($form_state['values']['op']) ? $form_state['values']['op'] : '';
   print_r($form);
   print_r($form_state);
+  if($op == t('Reset to defaults')) {
+    drupal_set_message(t('The configuration options have been reset to their default values.'));
+  } else {
+    drupal_set_message(t('The configuration options have been saved.'));
+  }
 }
 
 /**
