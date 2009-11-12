@@ -232,7 +232,60 @@ function user_timeline($username, $n = 10, $keep_at_messages = False) {
       $print_msg[] = array_pop($xml_array);
     }
   }
+
+  // parse content for @username or http:// links
+  $tweets = array();
+  foreach($print_msg as $tweet) {
+    $msg = $tweet['text'];
+    $tweet['text'] = "";
+    while(strlen($msg) > 0) {
+      $p = strpos($msg, "http://");
+      if($p === FALSE) {
+        $tweet['text'] .= twitter_link_users($msg);
+        $msg = "";
+      } else {
+        $tweet['text'] .= twitter_link_users(substr($msg, 0, $p));
+        $msg = substr($msg, $p);
+        $s = strpos($msg, " ");
+        if($s === FALSE) {
+          $tweet['text'] .= "<a href='" . $msg . "' rel='nofollow'>" . $msg . "</a>";
+          $msg = "";
+        } else {
+          $tweet['text'] .= "<a href='" . substr($msg, 0, $s) . "' rel='nofollow'>" . substr($msg, 0, $s) . "</a>";
+          $msg = substr($msg, $s);
+        }
+      }
+    }
+  }
   return $print_msg;
+}
+
+function twitter_link_users($text) {
+  $out = "";
+  while(strlen($text) > 0) {
+    $p = strpos($text, "@");
+    if($p === FALSE) {
+      $out .= $text;
+      $text = "";
+    } else {
+      $out .= substr($text, 0, $p+1);
+      $text = substr($text, $p+1);
+      $un = "";
+      while(TRUE) {
+        if(strlen($text) == 0) {
+          $out .= "<a href='http://twitter.com/" . $un . "' rel='nofollow'>" . $un . "</a>";
+          break;
+        } elseif(stripos("abcdefghijklmnopqrstuvwxyz0123456789", substr($text, 0, 1)) === FALSE) {
+          $out .= "<a href='http://twitter.com/" . $un . "' rel='nofollow'>" . $un . "</a>";
+          break;
+        } else {
+          $un .= substr($text, 0, 1);
+          $text = substr($text, 1);
+        }
+      }
+    }
+  }
+  return $out;
 }
 
 class twitter_xml_parser {
