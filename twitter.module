@@ -122,20 +122,6 @@ function twitter_menu() {
  *  Admin settings
  */
 function twitter_admin_settings() {
-  $form['twitter_settings'] = array(
-  '#type' => 'fieldset',
-  '#title' => t('Twitter Settings'),
-  '#collapsible' => False,
-  '#collapsed' => False,
-  );
-  $form['twitter_settings']['twitter_username'] = array(
-  '#type' => 'textfield',
-  '#title' => t('Your twitter user name'),
-  '#default_value' => variable_get('twitter_username', ''),
-  '#size' => 20,
-  '#maxlength' => 40,
-  '#description' => t('The username of a public twitter account you want to display.'),
-  );
   $result = db_query("SELECT username, blockid, show_at_tweets, show_items FROM twitter_cache");
   while($row = db_fetch_array($result)) {
     $form[sprintf("twitter_user_%d", $row['blockid'])] = array(
@@ -168,6 +154,34 @@ function twitter_admin_settings() {
       '#default_value' => FALSE,
       '#description' => t('Remove this block from the site.'));
   }
+
+  $form['twitter_add'] = array(
+  '#type' => 'fieldset',
+  '#title' => t('Add Twitter User'),
+  '#collapsible' => False,
+  '#collapsed' => False,
+  );
+  $form['twitter_add']['username'] = array(
+  '#type' => 'textfield',
+  '#title' => t('Your twitter user name'),
+  '#default_value' => "",
+  '#size' => 40,
+  '#maxlength' => 255,
+  '#description' => t('The username of a public twitter account you want to display.'),
+  );
+  $form['twitter_add']['at_posts'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Display @ Tweets'),
+    '#default_value' => 0,
+    '#description' => t('Show directed replies that start with an @ symbol.'));
+  $form['twitter_add']['show_posts'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Number of Tweets to show'),
+    '#default_value' => 5,
+    '#size' => 4,
+    '#maxlength' => 2,
+    '#description' => t('The maximum number of tweets to display at once.  Only the last 20 are retrieved so if you\'ve set this more than 20 or hidden @ replies it will be less than 20'));
+
   $form['buttons']['submit'] = array('#type' => 'submit', '#value' => t('Save configuration'));
   $form['buttons']['reset'] = array('#type' => 'submit', '#value' => t('Reset to defaults'));
 
