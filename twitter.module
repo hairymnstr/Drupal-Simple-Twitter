@@ -256,8 +256,9 @@ function user_timeline($username, $n = 10, $keep_at_messages = False) {
         }
       }
     }
+  $tweets[] = $tweet;
   }
-  return $print_msg;
+  return $tweets;
 }
 
 function twitter_link_users($text) {
