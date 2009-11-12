@@ -123,6 +123,10 @@ function twitter_menu() {
  */
 function twitter_admin_settings() {
   $result = db_query("SELECT username, blockid, show_at_tweets, show_items FROM twitter_cache");
+  $form = array();
+  $form['instructions'] = array(
+    '#value' => t('You can configure all the Twitter specific settings here.  However if you add a new Twitter user this will make a new block, to show the block, or move any existing blocks you need to go to the blocks admin page') . "<a href='/admin/build/block'>/admin/build/block</a>" . ".";
+  );
   while($row = db_fetch_array($result)) {
     $form[sprintf("twitter_user_%d", $row['blockid'])] = array(
       '#type' => 'fieldset',
@@ -226,6 +230,16 @@ function twitter_settings_submit($form, &$form_state) {
           'cache_time' => strftime("%Y-%m-%d %H:%M:%S", 0)); // reset cache time so the block is reloaded with new settings
         drupal_write_record('twitter_cache', $data, 'blockid');
       }
+    }
+    // see if there's a new user to add
+    if($form_state['values']['username'] != "") {
+      // add user username was changed, so add it to the database
+      $data = array(
+        'username' => $form_state['values']['username'],
+        'show_at_tweets' => $form_state['values']['at_posts'],
+        'show_items' => intval($form_state['values']['show_posts']),
+        'cache_time' => strftime("%Y-%m-%d %H:%M:%S", 0));
+      drupal_write_record('twitter_cache', $data);
     }
   }
   if($op == t('Reset to defaults')) {
