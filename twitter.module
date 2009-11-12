@@ -232,7 +232,7 @@ function twitter_settings_submit($form, &$form_state) {
       }
     }
     // see if there's a new user to add
-    if($form_state['values']['username'] != "") {
+    if(!($form_state['values']['username'] == "")) {
       // add user username was changed, so add it to the database
       $data = array(
         'username' => $form_state['values']['username'],
