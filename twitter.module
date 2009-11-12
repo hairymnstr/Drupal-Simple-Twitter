@@ -193,10 +193,10 @@ function twitter_settings_submit($form, &$form_state) {
         drupal_set_message(sprintf("Updated %s because username has changed to %s", $row['username'], $form_state['values'][sprintf("username_%d", $row['blockid'])]));
       } elseif(!($form_state['values'][sprintf("at_posts_%d", $row['blockid'])] == $row['show_at_tweets'])) {
         $update_list[$row['blockid']] = "UPD";
-        drupal_set_message(sprintf("Updated %s because show_at_tweets was changed"));
+        drupal_set_message(sprintf("Updated %s because show_at_tweets was changed", $row['username']));
       } elseif(!($form_state['values'][sprintf("show_posts_%d", $row['blockid'])] == $row['show_items'])) {
         $update_list[$row['blockid']] = "UPD";
-        drupal_set_message(sprintf("Updated %s because show_items was changed"));
+        drupal_set_message(sprintf("Updated %s because show_items was changed", $row['username']));
       }
     }
   }
