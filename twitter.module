@@ -45,12 +45,26 @@ function twitter_block($op = 'list', $delta = 0, $edit = array()) {
         }
         foreach($messages as $msg) {
           $block['content'] .= "<div class='tweet'>\n  <p>" . $msg['text'] . "</p>\n";
-          $block['content'] .= "  <p><span class='twitter-details'>On " . strftime("%e %b %Y", $msg['date']);
-          $block['content'] .= " at " . strftime("%H:%M", $msg['date']) . " From " . $msg['source'] . "</span></p>\n</div>\n";
+          $block['content'] .= "  <p><span class='twitter-details'>" . twitter_fuzzy_time($msg['date']);
+          $block['content'] .= " From " . $msg['source'] . "</span></p>\n</div>\n";
         }
       }
       return $block;    
   }
+}
+
+function twitter_fuzzy_time($timestamp) {
+  if((time() - $timestamp) > (24 * 60 * 60)) {
+    // just present the date
+    $out = "On " . strftime("%e %b %Y", $timestamp) . " at " . strftime("%H:%M", $timestamp);
+  } elseif((time() - $timestamp) > (60 * 60)) {
+    $out = sprintf("%d hours ago", round((time() - $timestamp) / (60 * 60)));
+  } elseif((time() - $timestamp) > 60) {
+    $out = sprintf("%d minutes ago", round((time() - $timestamp) / 60);
+  } else {
+    $out = "Less than a minute ago";
+  }
+  return $out;
 }
 
 /**
