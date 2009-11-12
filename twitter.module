@@ -274,10 +274,10 @@ function twitter_link_users($text) {
       $un = "";
       while(TRUE) {
         if(strlen($text) == 0) {
-          $out .= "<a href='http://twitter.com/" . $un . "' rel='nofollow'>" . $un . "</a>";
+          if(!($un == "")) {$out .= "<a href='http://twitter.com/" . $un . "' rel='nofollow'>" . $un . "</a>";}
           break;
         } elseif(stripos("abcdefghijklmnopqrstuvwxyz0123456789", substr($text, 0, 1)) === FALSE) {
-          $out .= "<a href='http://twitter.com/" . $un . "' rel='nofollow'>" . $un . "</a>";
+          if(!($un =="")) {$out .= "<a href='http://twitter.com/" . $un . "' rel='nofollow'>" . $un . "</a>";}
           break;
         } else {
           $un .= substr($text, 0, 1);
