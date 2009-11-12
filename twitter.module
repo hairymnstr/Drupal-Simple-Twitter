@@ -125,7 +125,7 @@ function twitter_admin_settings() {
   $result = db_query("SELECT username, blockid, show_at_tweets, show_items FROM twitter_cache");
   $form = array();
   $form['instructions'] = array(
-    '#value' => t('You can configure all the Twitter specific settings here.  However if you add a new Twitter user this will make a new block, to show the block, or move any existing blocks you need to go to the blocks admin page') . "<a href='/admin/build/block'>/admin/build/block</a>" . ".";
+    '#value' => t('You can configure all the Twitter specific settings here.  However if you add a new Twitter user this will make a new block, to show the block, or move any existing blocks you need to go to the blocks admin page') . "<a href='/admin/build/block'>/admin/build/block</a>" . ".",
   );
   while($row = db_fetch_array($result)) {
     $form[sprintf("twitter_user_%d", $row['blockid'])] = array(
