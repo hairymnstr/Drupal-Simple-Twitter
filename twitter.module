@@ -196,7 +196,7 @@ function twitter_settings_submit($form, &$form_state) {
         drupal_set_message(sprintf("Updated %s because show_at_tweets was changed", $row['username']));
       } elseif(!($form_state['values'][sprintf("show_posts_%d", $row['blockid'])] == $row['show_items'])) {
         $update_list[$row['blockid']] = "UPD";
-        drupal_set_message(sprintf("Updated %s because show_items was changed, to %d", $row['username'], intval($form_state['values'][sprintf("show_posts_%d",$row['blockid'])));
+        drupal_set_message(sprintf("Updated %s because show_items was changed, to %d", $row['username'], intval($form_state['values'][sprintf("show_posts_%d",$row['blockid'])])));
       }
     }
     // now we know what needs to be done, run the database queries
