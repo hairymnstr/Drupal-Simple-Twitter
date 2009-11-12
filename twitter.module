@@ -136,7 +136,7 @@ function twitter_admin_settings() {
   '#maxlength' => 40,
   '#description' => t('The username of a public twitter account you want to display.'),
   );
-  $result = db_query("SELECT username, blockid, show_at_tweets, show_tweets FROM twitter_cache");
+  $result = db_query("SELECT username, blockid, show_at_tweets, show_items FROM twitter_cache");
   while($row = db_fetch_array($result)) {
     $form[sprintf("twitter_user_%d", $row['blockid'])] = array(
       '#type' => 'fieldset',
@@ -158,7 +158,7 @@ function twitter_admin_settings() {
     $form[sprintf("twitter_user_%d", $row['blockid'])][sprintf("show_posts_%d", $row['blockid'])] = array(
       '#type' => 'textfield',
       '#title' => t('Number of Tweets to show'),
-      '#default_value' => $row['show_tweets'],
+      '#default_value' => $row['show_items'],
       '#size' => 4,
       '#maxlength' => 2,
       '#description' => t('The maximum number of tweets to display at once.  Only the last 20 are retrieved so if you\'ve set this more than 20 or hidden @ replies it will be less than 20'));
