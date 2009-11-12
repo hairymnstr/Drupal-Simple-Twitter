@@ -10,64 +10,14 @@ function twitter_block($op = 'list', $delta = 0, $edit = array()) {
       while($row = db_fetch_array($result)) {
         $blocks[$row['blockid']]['info'] = "@" . $row['username'] . "'s Twitter feed";
       }
-      $blocks['new']['info'] = "New Twitter Feed";
-      $blocks['new']['region'] = "-1";
       return $blocks;
     case 'configure':
       $form = array();
-      if($delta == 'new') {
-        $form['twitter_username'] = array(
-          '#type' => 'textfield',
-          '#title' => t('The twitter username to follow'),
-          '#default_value' => '',
-          '#size' => 20,
-          '#maxlength' => 255,
-          '#description' => t('The username of a public twitter account you want to display.'),
-        );
-      } else {
-        $result = db_query("SELECT * FROM twitter_cache WHERE blockid=%d", $delta);
-        if($row = db_fetch_array($result)) {
-          $form['twitter_username'] = array(
-            '#type' => 'textfield',
-            '#title' => t('The twitter username to follow'),
-            '#default_value' => $row['username'],
-            '#size' => 40,
-            '#maxlength' => 255,
-            '#description' => t('The username of a public twitter account you want to display.'),
-          );
-          $form['twitter_delete'] = array(
-            '#type' => 'checkbox',
-            '#title' => t('Delete this block'),
-            '#default_value' => FALSE,
-          );
-        }
-      }
+      $form['message'] = array(
+        '#value' => t('If you want to edit Twitter settings please use the <a href=\'?q=/admin/settings/twitter\'>Twitter admin page</a>.'),
+      );
       return $form;
     case 'save':
-      if($delta == 'new') {
-        $data = array(
-          'username' => $edit['twitter_username'],
-          'show_items' => 5,
-          'show_at_tweets' => FALSE,
-          'cache_time' => strftime("%Y-%m-%d %H:%M:%S", 0));
-        drupal_write_record('twitter_cache',$data);
-      } else {
-        $result = db_query("SELECT * FROM twitter_cache WHERE blockid=%d", $delta);
-        if($row = db_fetch_array($result)) {
-          if($edit['twitter_delete'] == 1) {
-            db_query("DELETE FROM twitter_cache WHERE blockid=%d", $delta);
-          } else {
-            $data = array(
-              'username' => $edit['twitter_username'],
-              'show_items' => 5,
-              'show_at_tweets' => FALSE,
-              'blockid' => $delta,
-              'cache_time' => strftime("%Y-%m-%d %H:%M:%S", 0), //reset the cache time to the epoch to make sure this gets rebuilt
-            );
-            drupal_write_record('twitter_cache', $data, 'blockid');
-          }
-        }
-      }
       return;      
     case 'view': default:
       // always include the css file
@@ -125,7 +75,7 @@ function twitter_admin_settings() {
   $result = db_query("SELECT username, blockid, show_at_tweets, show_items FROM twitter_cache");
   $form = array();
   $form['instructions'] = array(
-    '#value' => t('You can configure all the Twitter specific settings here.  However if you add a new Twitter user this will make a new block, to show the block, or move any existing blocks you need to go to the blocks admin page') . "<a href='/admin/build/block'>/admin/build/block</a>" . ".",
+    '#value' => t('You can configure all the Twitter specific settings here.  However if you add a new Twitter user this will make a new block, to show the block, or move any existing blocks you need to go to the blocks admin page ') . "<a href='/admin/build/block'>/admin/build/block</a>" . ".",
   );
   while($row = db_fetch_array($result)) {
     $form[sprintf("twitter_user_%d", $row['blockid'])] = array(
