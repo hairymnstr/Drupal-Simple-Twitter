@@ -136,7 +136,20 @@ function twitter_admin_settings() {
   '#maxlength' => 40,
   '#description' => t('The username of a public twitter account you want to display.'),
   );
-  return system_settings_form($form);
+  $form['buttons']['submit'] = array('#type' => 'submit', '#value' => t('Save configuration'));
+  $form['buttons']['reset'] = array('#type' => 'submit', '#value' => t('Reset to defaults'));
+
+  if(!empty($_POST) && form_get_errors()) {
+    drupal_set_message(t('The settings have not been saved because of the errors.'), 'error');
+  }
+  $form['#submit'][] = 'twitter_settings_submit';
+  $form['#theme'] = 'system_settings_form';
+  return $form;
+}
+
+function twitter_settings_submit($form, &$form_state) {
+  print_r($form);
+  print_r($form_state);
 }
 
 /**
